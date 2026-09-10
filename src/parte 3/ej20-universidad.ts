@@ -20,6 +20,10 @@
  * solamente del lado de la materia.
  */
 
+/**
+ * EJERCICIO 20 (INTEGRADOR) - Sistema de gestión de una universidad
+ */
+
 export abstract class Persona {
     constructor(
         public legajo: number,
@@ -45,6 +49,7 @@ export class Materia {
         const alumnoYaInscripto = this.alumnosInscriptos.some(
             (alumnoInscripto) => alumnoInscripto.legajo === alumno.legajo
         );
+
         if (!alumnoYaInscripto) {
             this.alumnosInscriptos.push(alumno);
         }
@@ -55,28 +60,52 @@ export class Materia {
             (alumnoInscripto) => alumnoInscripto.legajo !== alumno.legajo
         );
     }
-    
+
     asignarDocente(docente: Docente): void {
         const docenteYaAsignado = this.docentesAsignados.some(
             (docenteAsignado) => docenteAsignado.legajo === docente.legajo
         );
+
         if (!docenteYaAsignado) {
             this.docentesAsignados.push(docente);
         }
     }
 
     getAlumnosInscriptos(): Alumno[] {
-        return [...this.alumnosInscriptos];
+        return this.alumnosInscriptos.map(
+            (alumno) =>
+                new Alumno(
+                    alumno.legajo,
+                    alumno.nombre,
+                    alumno.apellido,
+                    alumno.email
+                )
+        );
     }
 
     getDocentesAsignados(): Docente[] {
-        return [...this.docentesAsignados];
+        return this.docentesAsignados.map(
+            (docente) =>
+                new Docente(
+                    docente.legajo,
+                    docente.nombre,
+                    docente.apellido,
+                    docente.email,
+                    docente.especialidad
+                )
+        );
     }
 }
 
 export class Alumno extends Persona {
     private materias: Materia[] = [];
-    constructor(legajo: number, nombre: string, apellido: string, email: string) {
+
+    constructor(
+        legajo: number,
+        nombre: string,
+        apellido: string,
+        email: string
+    ) {
         super(legajo, nombre, apellido, email);
     }
 
@@ -84,6 +113,7 @@ export class Alumno extends Persona {
         const materiaYaInscripta = this.materias.some(
             (materiaInscripta) => materiaInscripta.codigo === materia.codigo
         );
+
         if (!materiaYaInscripta) {
             this.materias.push(materia);
             materia.inscribirAlumno(this);
@@ -92,14 +122,22 @@ export class Alumno extends Persona {
 
     quitarMateria(materia: Materia): void {
         this.materias = this.materias.filter(
-            (materiaInscripta) => materiaInscripta.codigo !== materia.codigo
+            (materiaInscripta) =>
+                materiaInscripta.codigo !== materia.codigo
         );
 
         materia.quitarAlumno(this);
     }
 
     getMaterias(): Materia[] {
-        return [...this.materias];
+        return this.materias.map(
+            (materia) =>
+                new Materia(
+                    materia.codigo,
+                    materia.nombre,
+                    materia.horas
+                )
+        );
     }
 
     obtenerInformacion(): string {
@@ -122,7 +160,8 @@ export class Docente extends Persona {
 
     asignarMateria(materia: Materia): void {
         const materiaYaAsignada = this.materiasAsignadas.some(
-            (materiaAsignada) => materiaAsignada.codigo === materia.codigo
+            (materiaAsignada) =>
+                materiaAsignada.codigo === materia.codigo
         );
 
         if (!materiaYaAsignada) {
@@ -132,7 +171,14 @@ export class Docente extends Persona {
     }
 
     getMateriasAsignadas(): Materia[] {
-        return [...this.materiasAsignadas];
+        return this.materiasAsignadas.map(
+            (materia) =>
+                new Materia(
+                    materia.codigo,
+                    materia.nombre,
+                    materia.horas
+                )
+        );
     }
 
     obtenerInformacion(): string {
