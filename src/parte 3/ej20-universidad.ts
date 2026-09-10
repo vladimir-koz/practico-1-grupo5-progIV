@@ -19,11 +19,6 @@
  * falta (ni corresponde) llamarlos "a mano" salvo que quieras inscribir
  * solamente del lado de la materia.
  */
-
-/**
- * EJERCICIO 20 (INTEGRADOR) - Sistema de gestión de una universidad
- */
-
 export abstract class Persona {
     constructor(
         public legajo: number,
